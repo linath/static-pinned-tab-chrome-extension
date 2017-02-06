@@ -1,9 +1,11 @@
-chrome.tabs.onUpdated.addListener(function(tabId) {
-  chrome.tabs.get(tabId, function(tab) {
-    if (tab.pinned) {
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+   chrome.tabs.get(tabId, function(tab) {	   
+    if (tab.pinned) {		
       chrome.tabs.executeScript({
-        code: "document.querySelectorAll('a[href]').forEach(a => a.setAttribute('target', '_blank'));"
-      });
+		code: "var currentTabUrl = '" + JSON.stringify(tab.url) + "';"
+      }, function(){
+		  chrome.tabs.executeScript({file: "tab_content.js"});
+	  });
     }
-  });
+  }); 
 });
